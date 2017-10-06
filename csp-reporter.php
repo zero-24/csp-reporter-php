@@ -15,10 +15,12 @@ if ($jsonData)
 		JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
 	);
 
+	$website = ($jsonData['csp-report']['referrer'] ? $jsonData['csp-report']['referrer'] : 'Unknown Website');
+
 	// Loop over all recipients
 	foreach ($recipients as $recipient)
 	{
 		// Mail the report to the recipient.
-		mail($recipient, sprintf($subject, $jsonData['csp-report']['referrer']), $mailData);
+		mail($recipient, sprintf($subject, $website), $mailData);
 	}
 }
