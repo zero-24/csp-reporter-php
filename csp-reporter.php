@@ -15,10 +15,11 @@ $blacklist = [
 $inputData = file_get_contents('php://input');
 $jsonData  = json_decode($inputData, true);
 
-$explode = explode(' ', $jsonData['csp-report']['violated-directive']);
-
+// Detect violated-directive 
+$explode           = explode(' ', $jsonData['csp-report']['violated-directive']);
 $violatedDirective = $explode[0] ? $explode[0] : 'none';
 
+// Check that the current report is not on the blacklist for sending mails else send mail
 if (!in_array($jsonData['csp-report']['blocked-uri'], $blacklist[$violatedDirective]))
 {
 	$mailData = json_encode(
