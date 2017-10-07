@@ -8,6 +8,13 @@ $blacklist = [
 	// There is a chrome bug with the inbuild translation: https://stackoverflow.com/questions/41052219/content-security-policy-translate-googleapis-com
 	'img-src' => ['https://www.gstatic.com/images/branding/product/2x/translate_24dp.png'],
 	'style-src' => ['https://translate.googleapis.com/translate_static/css/translateelement.css'],
+	// Looks like there is a Skype extension that cause this: https://github.com/nico3333fr/CSP-useful/blob/master/csp-wtf/explained.md#skype-assets
+	'font-src' => [
+		'https://sxt.cdn.skype.com/assets/fonts/SkypeAssets-Light.ttf',
+		'https://sxt.cdn.skype.com/assets/fonts/SkypeAssets-Regular.ttf',
+		'https://sxt.cdn.skype.com/assets/fonts/SkypeAssets-Light.woff',
+		'https://sxt.cdn.skype.com/assets/fonts/SkypeAssets-Regular.woff',
+	]
 ];
 // <-- Configuration
 
