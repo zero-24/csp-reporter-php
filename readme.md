@@ -7,8 +7,8 @@ This is my small csp reporter script based on the script provided there https://
 ### Setup the script
 
 - Download & copy the script to the webroot
-- Edit the script and configure the "$recipients" and "$subject" variables
-- Add to your CSP rule: report-uri /csp-reporter.php
+- Edit the script and configure the `$recipients` and `$subject` variables
+- Add to your CSP rule: `report-uri /csp-reporter.php`
 
 ### How the blacklist works
 
