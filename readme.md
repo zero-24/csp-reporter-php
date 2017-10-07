@@ -4,9 +4,16 @@ This is my small csp reporter script based on the script provided there https://
 
 ## Configuration
 
+### Setup the script
+
 - Download & copy the script to the webroot
 - Edit the script and configure the "$recipients" and "$subject" variables
 - Add to your CSP rule: report-uri /csp-reporter.php
+
+### How the blacklist works
+
+The backlist allows you to block reports from beeing send to you. For example the default backlist entry goes back to a issue in google chrome when you enabled the inbuild translation on your website. You as owner can not do anything here (as you would not whitelist that sources) but you also don't want to get mailed on any report like that.
+When you have some things like that you can extend the blacklist if you want.
 
 ## Joomla Integration
 
