@@ -22,7 +22,7 @@ if ($jsonData && !in_array($jsonData['csp-report']['blocked-uri'], $blacklist))
 		JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
 	);
 
-	$website = ($jsonData['csp-report']['referrer'] ? $jsonData['csp-report']['referrer'] : 'Unknown Website');
+	$website = ($jsonData['csp-report']['document-uri'] ? $jsonData['csp-report']['document-uri'] : 'Unknown Website');
 
 	// Loop over all recipients
 	foreach ($recipients as $recipient)
