@@ -15,7 +15,9 @@ $blacklist = [
 $inputData = file_get_contents('php://input');
 $jsonData  = json_decode($inputData, true);
 
-$violatedDirective = $jsonData['csp-report']['violated-directive'] ? $jsonData['csp-report']['violated-directive'] : 'none';
+$explode = explode(' ', $jsonData['csp-report']['violated-directive']);
+
+$violatedDirective = $explode[0] ? $explode[0] : 'none';
 
 if (!in_array($jsonData['csp-report']['blocked-uri'], $blacklist[$violatedDirective]))
 {
