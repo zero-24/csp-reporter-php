@@ -34,6 +34,9 @@ if (!in_array($jsonData['csp-report']['blocked-uri'], $blacklist[$violatedDirect
 		JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
 	);
 
+	// Add UserAgent String
+	$mailData .= "\n\n" . 'UserAgent: ' . $_SERVER['HTTP_USER_AGENT'];
+	
 	$website = ($jsonData['csp-report']['document-uri'] ? $jsonData['csp-report']['document-uri'] : 'Unknown Website');
 
 	// Loop over all recipients
