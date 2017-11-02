@@ -14,7 +14,11 @@ $blacklist = [
 		'https://sxt.cdn.skype.com/assets/fonts/SkypeAssets-Regular.ttf',
 		'https://sxt.cdn.skype.com/assets/fonts/SkypeAssets-Light.woff',
 		'https://sxt.cdn.skype.com/assets/fonts/SkypeAssets-Regular.woff',
-	]
+	],
+	// Looks like there are some broken extensions that got blocked
+	'extensions' => [
+		'safari-extension',
+	],
 ];
 // <-- Configuration
 
@@ -25,9 +29,10 @@ $jsonData  = json_decode($inputData, true);
 // Detect violated-directive 
 $explode           = explode(' ', $jsonData['csp-report']['violated-directive']);
 $violatedDirective = $explode[0] ? $explode[0] : 'none';
+$blockedUri        = $jsonData['csp-report']['blocked-uri'];
 
 // Check that the current report is not on the blacklist for sending mails else send mail
-if (!in_array($jsonData['csp-report']['blocked-uri'], $blacklist[$violatedDirective]))
+if (!in_array($blockedUri, $blacklist[$violatedDirective]) && !in_array(substr($blockedUri, 0, 16), $blacklist['extensions']))
 {
 	$mailData = json_encode(
 		$jsonData,
