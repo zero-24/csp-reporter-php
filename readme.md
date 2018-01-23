@@ -19,9 +19,9 @@ Basicly now this is a per domain and per directive blacklist.
 Here is a example:
 
 ```
-	'style-src' => [
-		'adblockers.opera-mini.net',
-	],
+'style-src' => [
+	'adblockers.opera-mini.net',
+],
 ```
 
 This configuration would block all emails where our csp reporter get a hit because of opera's addblocker injecting style files into your site.
