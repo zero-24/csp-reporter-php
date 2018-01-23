@@ -1,23 +1,31 @@
 <?php
 // Configuration -->
-$recipients = ['mail@example.org'];
-$subject    = 'CSP Violation on %s';
+$recipients = [
+	'csp@example.org',
+];
 
-// Blacklist of files to not report to you.
+$subject = 'CSP Violation on %s';
+
+// Blacklist of domains to not report to you.
 $blacklist = [
-	// There is a chrome bug with the inbuild translation: https://stackoverflow.com/questions/41052219/content-security-policy-translate-googleapis-com
-	'img-src' => ['https://www.gstatic.com/images/branding/product/2x/translate_24dp.png'],
-	'style-src' => ['https://translate.googleapis.com/translate_static/css/translateelement.css'],
-	// Looks like there is a Skype extension that cause this: https://github.com/nico3333fr/CSP-useful/blob/master/csp-wtf/explained.md#skype-assets
-	'font-src' => [
-		'https://sxt.cdn.skype.com/assets/fonts/SkypeAssets-Light.ttf',
-		'https://sxt.cdn.skype.com/assets/fonts/SkypeAssets-Regular.ttf',
-		'https://sxt.cdn.skype.com/assets/fonts/SkypeAssets-Light.woff',
-		'https://sxt.cdn.skype.com/assets/fonts/SkypeAssets-Regular.woff',
+	'img-src' => [
 	],
-	// Looks like there are some broken extensions that got blocked
+	'style-src' => [
+	],
+	'script-src' => [
+	],
+	'connect-src' => [
+	],
+	'font-src' => [
+	],
+	'default-src' => [
+	],
+	'frame-src' => [
+	],
 	'extensions' => [
 		'safari-extension',
+		'chrome-extension',
+		'moz-extension://',
 	],
 ];
 // <-- Configuration
@@ -26,22 +34,49 @@ $blacklist = [
 $inputData = file_get_contents('php://input');
 $jsonData  = json_decode($inputData, true);
 
+if (!is_array($jsonData))
+{
+	return;
+}
+
 // Detect violated-directive 
 $explode           = explode(' ', $jsonData['csp-report']['violated-directive']);
 $violatedDirective = $explode[0] ? $explode[0] : 'none';
 $blockedUri        = $jsonData['csp-report']['blocked-uri'];
+$blockedUri        = str_replace('https://www.', '', $blockedUri);
+$blockedUri        = str_replace('http://www.', '', $blockedUri);
+$blockedUri        = str_replace('https://', '', $blockedUri);
+$blockedUri        = str_replace('http://', '', $blockedUri);
+$blockeddomain     = explode('/', $blockedUri);
+$ip                = explode(':', $blockeddomain[0]);
+
+// Some Browser Plugin missuse our csp by setting "violated-directive": "script-src 'none'"
+if (substr($jsonData['csp-report']['violated-directive'], 0, 17) === "script-src 'none'")
+{
+	return;
+}
+
+// Return in case we have a IP as this is invalid anyway
+if (filter_var($ip[0], FILTER_VALIDATE_IP) !== false)
+{
+	retrun;
+}
 
 // Check that the current report is not on the blacklist for sending mails else send mail
-if (!in_array($blockedUri, $blacklist[$violatedDirective]) && !in_array(substr($blockedUri, 0, 16), $blacklist['extensions']))
+if (!in_array($blockeddomain[0], $blacklist[$violatedDirective]) && !in_array(substr($jsonData['csp-report']['blocked-uri'], 0, 16), $blacklist['extensions']))
 {
 	$mailData = json_encode(
 		$jsonData,
 		JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
 	);
 
-	// Add UserAgent String
+	// Add UserAgent, Blocked Domain and Blocked Uri value String
 	$mailData .= "\n\n" . 'UserAgent: ' . $_SERVER['HTTP_USER_AGENT'];
-	
+	$mailData .= "\n\n" . 'Violated Directive: ' . $violatedDirective;
+	$mailData .= "\n\n" . 'Blocked Domain: ' . $blockeddomain[0];
+	$mailData .= "\n\n" . 'Blocked Uri: ' . $jsonData['csp-report']['blocked-uri'];
+	$mailData .= "\n\n" . 'IP: ' . $ip[0];
+
 	$website = ($jsonData['csp-report']['document-uri'] ? $jsonData['csp-report']['document-uri'] : 'Unknown Website');
 
 	// Loop over all recipients
