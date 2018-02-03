@@ -59,7 +59,7 @@ if (substr($jsonData['csp-report']['violated-directive'], 0, 17) === "script-src
 // Return in case we have a IP as this is invalid anyway
 if (filter_var($ip[0], FILTER_VALIDATE_IP) !== false)
 {
-	retrun;
+	return;
 }
 
 // Check that the current report is not on the blacklist for sending mails else send mail
