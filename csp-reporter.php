@@ -51,15 +51,25 @@ $blockeddomain     = explode('/', $blockedUri);
 $ip                = explode(':', $blockeddomain[0]);
 
 // Some Browser Plugin missuse our csp by setting "violated-directive": "script-src 'none'"
-if (substr($jsonData['csp-report']['violated-directive'], 0, 17) === "script-src 'none'")
+if (substr($jsonData['csp-report']['violated-directive'], 0, 17) === "script-src 'none'"
+	|| substr($jsonData['csp-report']['original-policy'], 0, 17) === "script-src 'none'")
 {
-	return;
+	exit;
 }
 
 // Return in case we have a IP as this is invalid anyway
 if (filter_var($ip[0], FILTER_VALIDATE_IP) !== false)
 {
-	return;
+	exit;
+}
+
+// Catch the just another subdomain case here.
+foreach ($blacklist[$violatedDirective] as $blacklistedUri)
+{
+	if (strpos($blockeddomain[0], $blacklistedUri))
+	{
+		exit;
+	}
 }
 
 // Check that the current report is not on the blacklist for sending mails else send mail
@@ -75,7 +85,6 @@ if (!in_array($blockeddomain[0], $blacklist[$violatedDirective]) && !in_array(su
 	$mailData .= "\n\n" . 'Violated Directive: ' . $violatedDirective;
 	$mailData .= "\n\n" . 'Blocked Domain: ' . $blockeddomain[0];
 	$mailData .= "\n\n" . 'Blocked Uri: ' . $jsonData['csp-report']['blocked-uri'];
-	$mailData .= "\n\n" . 'IP: ' . $ip[0];
 
 	$website = ($jsonData['csp-report']['document-uri'] ? $jsonData['csp-report']['document-uri'] : 'Unknown Website');
 
