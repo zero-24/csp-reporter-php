@@ -27,6 +27,9 @@ $blacklist = [
 		'chrome-extension',
 		'moz-extension://',
 	],
+	'document-uri' => [
+		'about',
+	],
 ];
 // <-- Configuration
 
@@ -70,6 +73,12 @@ foreach ($blacklist[$violatedDirective] as $blacklistedUri)
 	{
 		exit;
 	}
+}
+
+// Block broken document-uri's like about
+if (in_array($jsonData['csp-report']['document-uri'], $blacklist['document-uri']))
+{
+	exit;
 }
 
 // Check that the current report is not on the blacklist for sending mails else send mail
