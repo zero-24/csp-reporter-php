@@ -31,6 +31,8 @@ $blacklist = [
 		'about',
 		'about:blank',
 	],
+	'top-level-domain' => [
+	],
 ];
 // <-- Configuration
 
@@ -85,6 +87,15 @@ if (filter_var($ip[0], FILTER_VALIDATE_IP) !== false)
 foreach ($blacklist[$violatedDirective] as $blacklistedUri)
 {
 	if (strpos($blockeddomain[0], $blacklistedUri))
+	{
+		exit;
+	}
+}
+
+// Block by top-level-domain
+foreach ($blacklist['top-level-domain'] as $blacklistedTopLevelDomain)
+{
+	if (substr($blockeddomain[0], -strlen($blacklistedTopLevelDomain)) === $blacklistedTopLevelDomain)
 	{
 		exit;
 	}
