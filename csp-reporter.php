@@ -116,12 +116,10 @@ if (!in_array($blockeddomain[0], $blacklist[$violatedDirective]) && !in_array(su
 	$mailData .= "\n\n" . 'Blocked Uri: ' . $jsonData['csp-report']['blocked-uri'];
 	$mailData .= "\n\n" . 'ReportSource: ' . $reportSource;
 
-	$website = ($jsonData['csp-report']['document-uri'] ? $jsonData['csp-report']['document-uri'] : 'Unknown Website');
-
 	// Loop over all recipients
 	foreach ($recipients as $recipient)
 	{
 		// Mail the report to the recipient.
-		mail($recipient, sprintf($subject, $website), $mailData);
+		mail($recipient, sprintf($subject, $reportSource), $mailData);
 	}
 }
