@@ -101,6 +101,12 @@ foreach ($blacklist['top-level-domain'] as $blacklistedTopLevelDomain)
 	}
 }
 
+// Block reports form services that don't handle the 'self' source correct and block your domain itself.
+if ($blockeddomain[0] === $reportSource)
+{
+	exit;
+}
+
 // Check that the current report is not on the blacklist for sending mails else send mail
 if (!in_array($blockeddomain[0], $blacklist[$violatedDirective]) && !in_array(substr($jsonData['csp-report']['blocked-uri'], 0, 16), $blacklist['extensions']))
 {
