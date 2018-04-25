@@ -81,6 +81,13 @@ if (substr($jsonData['csp-report']['violated-directive'], 0, 17) === "script-src
 	exit;
 }
 
+// Some Browser report inline and eval via violated-directive
+if (substr($jsonData['csp-report']['violated-directive'], 0, 4) === "eval"
+	|| substr($jsonData['csp-report']['violated-directive'], 0, 6) === "inline")
+{
+	exit;
+}
+
 // Return in case we have a IP as this is invalid anyway
 if (filter_var($ip[0], FILTER_VALIDATE_IP) !== false)
 {
