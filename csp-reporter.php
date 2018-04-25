@@ -70,9 +70,13 @@ if (in_array($jsonData['csp-report']['document-uri'], $blacklist['document-uri']
 	exit;
 }
 
-// Some Browser Plugin missuse our csp by setting "violated-directive": "script-src 'none'"
+// Some Browser Plugin missuse our csp by settings
 if (substr($jsonData['csp-report']['violated-directive'], 0, 17) === "script-src 'none'"
-	|| substr($jsonData['csp-report']['original-policy'], 0, 17) === "script-src 'none'")
+	|| substr($jsonData['csp-report']['violated-directive'], 0, 17) === "object-src 'none'"
+	|| substr($jsonData['csp-report']['violated-directive'], 0, 14) === "img-src 'none'"
+	|| substr($jsonData['csp-report']['original-policy'], 0, 17) === "script-src 'none'"
+	|| substr($jsonData['csp-report']['original-policy'], 0, 17) === "object-src 'none'"
+	|| substr($jsonData['csp-report']['original-policy'], 0, 14) === "img-src 'none'")
 {
 	exit;
 }
