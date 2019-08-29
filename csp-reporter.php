@@ -94,14 +94,42 @@ if (filter_var($ip[0], FILTER_VALIDATE_IP) !== false)
 	exit;
 }
 
-// Catch the just another subdomain case here.
-foreach ($blacklist[$violatedDirective] as $blacklistedUri)
+if (isset($blacklist[$violatedDirective]))
 {
-	if (strpos($blockeddomain[0], $blacklistedUri))
+	// Catch the just another subdomain case here.
+	foreach ($blacklist[$violatedDirective] as $blacklistedUri)
 	{
-		exit;
+		if (strpos($blockeddomain[0], $blacklistedUri))
+		{
+			exit;
+		}
 	}
 }
+
+if ($violatedDirective === 'script-src-elem' && isset($blacklist['script-src']))
+{
+	// Handle script-src-elem the same as script-src
+	foreach ($blacklist['script-src'] as $blacklistedUri)
+	{
+		if (strpos($blockeddomain[0], $blacklistedUri))
+		{
+			exit;
+		}
+	}
+}
+
+if ($violatedDirective === 'style-src-elem' && isset($blacklist['style-src']))
+{
+	// Handle style-src-elem the same as script-src
+	foreach ($blacklist['style-src'] as $blacklistedUri)
+	{
+		if (strpos($blockeddomain[0], $blacklistedUri))
+		{
+			exit;
+		}
+	}
+}
+
 
 // Block by top-level-domain
 foreach ($blacklist['top-level-domain'] as $blacklistedTopLevelDomain)
