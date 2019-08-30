@@ -106,7 +106,7 @@ if (isset($blacklist[$violatedDirective]))
 	}
 }
 
-if ($violatedDirective === 'script-src-elem' && isset($blacklist['script-src']))
+if (($violatedDirective === 'script-src-elem' || $violatedDirective === 'script-src-attr') && isset($blacklist['script-src']))
 {
 	// Handle script-src-elem the same as script-src
 	foreach ($blacklist['script-src'] as $blacklistedUri)
@@ -118,7 +118,7 @@ if ($violatedDirective === 'script-src-elem' && isset($blacklist['script-src']))
 	}
 }
 
-if ($violatedDirective === 'style-src-elem' && isset($blacklist['style-src']))
+if (($violatedDirective === 'style-src-elem' || $violatedDirective === 'style-src-attr') && isset($blacklist['style-src']))
 {
 	// Handle style-src-elem the same as script-src
 	foreach ($blacklist['style-src'] as $blacklistedUri)
