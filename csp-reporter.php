@@ -147,7 +147,11 @@ if ($blockeddomain[0] === $reportSource)
 }
 
 // Check that the current report is not on the blacklist for sending mails else send mail
-if (!isset($blacklist[$violatedDirective]) || (!in_array($blockeddomain[0], $blacklist[$violatedDirective]) && !in_array(substr($jsonData['csp-report']['blocked-uri'], 0, 16), $blacklist['extensions'])))
+if (!isset($blacklist[$violatedDirective])
+	|| (!in_array($blockeddomain[0], $blacklist[$violatedDirective])
+	&& !in_array(substr($jsonData['csp-report']['blocked-uri'], 0, 16), $blacklist['extensions'])
+	&& !in_array(substr($jsonData['csp-report']['source-file'], 0, 16), $blacklist['extensions']))
+)
 {
 	$mailData = json_encode(
 		$jsonData,
