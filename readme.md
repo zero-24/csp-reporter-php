@@ -4,7 +4,7 @@ This is my csp reporter script based on the script provided there https://mathia
 
 ## Sponsoring and Donation
 
-You use this code in an commercial context and / or want to support me and give something back?
+You want to support my work for the [development of my extensions](https://extensions.joomla.org/profile/profile/details/200189/) and my work for the [Joomla! Project](https://volunteers.joomla.org/joomlers/248-tobias-zulauf) you can give something back and sponsor me. 
 
 There are two ways to support me right now:
 - This code is part of [Github Sponsors](https://github.com/sponsors/zero-24/) by sponsoring me, you help me continue my oss work for the [Joomla! Project](https://volunteers.joomla.org/joomlers/248-tobias-zulauf), write bug fixes, improving features and maintain my extensions.
