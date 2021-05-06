@@ -3,7 +3,7 @@
 $recipients = [
 	'csp@example.org',
 ];
-
+$from = 'From: <csp@example.org>';
 $subject = 'CSP Violation on %s';
 
 // Blacklist of domains to not report to you.
@@ -169,6 +169,6 @@ if (!isset($blacklist[$violatedDirective])
 	foreach ($recipients as $recipient)
 	{
 		// Mail the report to the recipient.
-		mail($recipient, sprintf($subject, $reportSource), $mailData);
+		mail($recipient, sprintf($subject, $reportSource), $mailData, $from);
 	}
 }
